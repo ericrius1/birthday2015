@@ -33,32 +33,67 @@ var HapiField = function() {
   scene.add(particles);
 
   this.simulation.addBoundTexture(this.renderUniforms.t_pos, 'output');
-  this.simulation.resetRand(5);
+
+  var texture = this.createPositionTexture(SIZE);
+  this.simulation.reset(texture);
 
 }
 
+HapiField.prototype.createPositionTexture = function(size) {
+  var data = new Float32Array(size * size * 4);
+  var planeGeo = new THREE.PlaneGeometry(2, 2, 100, 100);
+  var mesh = new THREE.Mesh(planeGeo);
+  scene.add(mesh)
+  var vertices = planeGeo.vertices;
+  for ( var i = 0, j=0; j < data.length; i++, j+=4) {
+    if(i >= vertices.length){
+      i = 0;
+    }
+    data[j] = vertices[i].x;
+    data[j+1] = vertices[i].y;
+    data[j+2] = vertices[i].z;
+    data[j+3]  = 1;
+  }
+
+  var texture = new THREE.DataTexture(
+    data,
+    size,
+    size,
+    THREE.RGBAFormat,
+    THREE.FloatType
 
 
+  );
+  texture.minFilter = THREE.NearestFilter;
+  texture.magFilter = THREE.NearestFilter;
+  texture.needsUpdate = true;
+
+  return texture;
+
+}
 
 HapiField.prototype.createLookupGeometry = function(size) {
-  var geo = new THREE.BufferGeometry()
+
+
+  var geo = new THREE.BufferGeometry();
   var positions = new Float32Array(size * size * 3);
+  var colors = new Float32Array(size * size * 3);
 
   for (var i = 0, j = 0, l = positions.length / 3; i < l; i++, j += 3) {
 
-    positions[j] = (i % size) / size;
-    positions[j + 1] = Math.floor(i / size) / size;
-
+    positions[j] = Math.random() * 10
+    positions[j + 1] = Math.random()
   }
 
   var posA = new THREE.BufferAttribute(positions, 3);
   geo.addAttribute('position', posA);
+
 
   return geo;
 
 }
 HapiField.prototype.update = function() {
   this.simulationUniforms.dT.value = clock.getDelta();
-  this.simulation.update(); 
+  this.simulation.update();
 
 }

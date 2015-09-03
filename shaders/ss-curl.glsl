@@ -1,7 +1,7 @@
 uniform sampler2D t_oPos;
 uniform sampler2D t_pos;
 
-uniform float dT;
+// uniform float dT;
 uniform float noiseSize;
 uniform vec2  resolution;
 
@@ -26,7 +26,7 @@ void main(){
 
   vec3 curl = curlNoise( pos.xyz * noiseSize );
 
-  vel += curl * .01;
+  vel += curl * .0001;
   vel *= .97; // dampening
 
   vec3 p = pos.xyz + vel;
