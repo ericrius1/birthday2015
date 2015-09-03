@@ -22,6 +22,12 @@ var HapiField = function() {
   var geo = this.createLookupGeometry(SIZE);
   var mat = new THREE.ShaderMaterial({
     uniforms: this.renderUniforms,
+    attributes: {
+      color: {
+        type: "vec3",
+        value: null
+      }
+    },
     vertexShader: shaders.vs.lookup,
     fragmentShader: shaders.fs.lookup
   });
