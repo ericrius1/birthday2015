@@ -17,17 +17,11 @@ var HapiField = function() {
     }
   }
 
-  var SIZE = 128;
+  var SIZE = 512;
   this.simulation = new PhysicsRenderer(SIZE, shaders.ss.sim, renderer);
   var geo = this.createLookupGeometry(SIZE);
   var mat = new THREE.ShaderMaterial({
     uniforms: this.renderUniforms,
-    attributes: {
-      color: {
-        type: "vec3",
-        value: null
-      }
-    },
     vertexShader: shaders.vs.lookup,
     fragmentShader: shaders.fs.lookup
   });
@@ -49,16 +43,16 @@ HapiField.prototype.createPositionTexture = function(size) {
   var data = new Float32Array(size * size * 4);
   var planeGeo = new THREE.PlaneGeometry(2, 2, 100, 100);
   var mesh = new THREE.Mesh(planeGeo);
-  scene.add(mesh)
+  // scene.add(mesh)
   var vertices = planeGeo.vertices;
   for ( var i = 0, j=0; j < data.length; i++, j+=4) {
     if(i >= vertices.length){
       i = 0;
     }
     data[j] = vertices[i].x;
-    data[j+1] = vertices[i].y;
-    data[j+2] = vertices[i].z;
-    data[j+3]  = 1;
+    data[j+1] = vertices[i].y + Math.random()/10;
+    data[j+2] = vertices[i].z + Math.random()/10;
+    data[j+3]  = 0;
   }
 
   var texture = new THREE.DataTexture(
@@ -89,10 +83,17 @@ HapiField.prototype.createLookupGeometry = function(size) {
 
     positions[j] = Math.random() * 10
     positions[j + 1] = Math.random()
+
+    colors[j] = Math.random()
+    colors[j+1] = Math.random()
+    colors[j+2] = Math.random()
+
   }
 
   var posA = new THREE.BufferAttribute(positions, 3);
+  var colorA = new THREE.BufferAttribute(colors, 3)
   geo.addAttribute('position', posA);
+  geo.addAttribute('color', colorA);
 
 
   return geo;
