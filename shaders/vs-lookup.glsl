@@ -1,5 +1,5 @@
 
-
+uniform sampler2D t_audio;
 uniform sampler2D t_pos;
 
 attribute vec3 color;

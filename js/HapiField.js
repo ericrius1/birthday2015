@@ -6,7 +6,7 @@ var HapiField = function() {
     },
     noiseSize: {
       type: "f",
-      value: .1
+      value: 2
     }
   }
 
@@ -48,14 +48,17 @@ HapiField.prototype.init = function() {
 
   var particles = new THREE.PointCloud(geo, mat);
   particles.frustumCulled = false;
+  particles.position.set(-0.5, -.5, -1);
   scene.add(particles);
 
   this.simulation.addBoundTexture(this.renderUniforms.t_pos, 'output');
 
   var texture = this.createPositionTexture(this.SIZE);
   this.simulation.reset(texture);
-
   this.ready = true;
+  setTimeout(function() {
+    this.flow = true;
+  }.bind(this), 20000)
 
 }
 
@@ -124,7 +127,6 @@ HapiField.prototype.update = function() {
   if(!this.ready){
     return;
   }
-  this.simulationUniforms.dT.value = clock.getDelta();
   this.simulation.update();
 
 }

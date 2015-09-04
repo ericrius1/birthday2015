@@ -11,8 +11,8 @@
 
 
 
-     // var controlsEnabled = false;
-     var controlsEnabled = true;
+     var controlsEnabled = false;
+     // var controlsEnabled = true;
 
      var cameraSpeed = .01;
      // var controlsEnabled = true;
@@ -42,8 +42,8 @@
        var h = window.innerHeight;
 
        camera = new THREE.PerspectiveCamera(65, w / h, 0.1, 10000);
-       // camera.position.set(0, 11, 1)
-       camera.position.z = 10
+       camera.position.set(0, 0, 1)
+       // camera.position.z = 10
 
        scene = new THREE.Scene();
 
