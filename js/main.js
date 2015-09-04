@@ -5,9 +5,9 @@
      var stream;
      var audio = new AudioController();
 
-     var userAudio = new UserAudio(audio.ctx, audio.gain);
+     // var userAudio = new UserAudio(audio.ctx, audio.gain);
      // Muting audio, so we don't have feedback
-     audio.mute.gain.value = 0;
+     // audio.mute.gain.value = 0;
 
 
 
@@ -23,9 +23,9 @@
      var shaders = new ShaderLoader('shaders');
 
      shaders.shaderSetLoaded = function() {
-       // stream = new Stream('assets/Beautiful.mp3', audio.ctx, audio.gain);
-       // stream.play();
        init();
+       stream = new Stream('assets/across.mp3', audio.ctx, audio.gain);
+       stream.play();
        animate();
      }
 

@@ -14,6 +14,10 @@ var HapiField = function() {
     t_pos: {
       type: "t",
       value: null
+    },
+    t_audio: {
+      type: "t",
+      value: audio.texture
     }
   }
 
