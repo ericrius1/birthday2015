@@ -17,9 +17,27 @@ var HapiField = function() {
     }
   }
 
-  var SIZE = 512;
-  this.simulation = new PhysicsRenderer(SIZE, shaders.ss.sim, renderer);
-  var geo = this.createLookupGeometry(SIZE);
+  this.SIZE = 512;
+  var canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  var canvasTexture = new THREE.Texture(canvas);
+  this.ctx = canvas.getContext('2d');
+  var image = new Image();
+  image.src = "assets/stacyhoward.jpg";
+  image.onload = function() {
+    this.ctx.drawImage(image, 0, 0, this.SIZE, this.SIZE);
+    this.imageData = this.ctx.getImageData(0, 0, this.SIZE, this.SIZE).data;
+    canvasTexture.needsUpdate = true;
+    this.init();
+  }.bind(this);
+
+
+}
+
+HapiField.prototype.init = function() {
+  this.simulation = new PhysicsRenderer(this.SIZE, shaders.ss.sim, renderer);
+  var geo = this.createLookupGeometry(this.SIZE);
   var mat = new THREE.ShaderMaterial({
     uniforms: this.renderUniforms,
     vertexShader: shaders.vs.lookup,
@@ -34,8 +52,10 @@ var HapiField = function() {
 
   this.simulation.addBoundTexture(this.renderUniforms.t_pos, 'output');
 
-  var texture = this.createPositionTexture(SIZE);
+  var texture = this.createPositionTexture(this.SIZE);
   this.simulation.reset(texture);
+
+  this.ready = true;
 
 }
 
@@ -79,14 +99,14 @@ HapiField.prototype.createLookupGeometry = function(size) {
   var positions = new Float32Array(size * size * 3);
   var colors = new Float32Array(size * size * 3);
 
-  for (var i = 0, j = 0, l = positions.length / 3; i < l; i++, j += 3) {
+  for (var i = 0, j = 0, c = 0, l = positions.length / 3; i < l; i++, j += 3, c+=4) {
 
     positions[j] = Math.random() * 10
     positions[j + 1] = Math.random()
 
-    colors[j] = Math.random()
-    colors[j+1] = Math.random()
-    colors[j+2] = Math.random()
+    colors[j] = this.imageData[c]/255.0;
+    colors[j+1] = this.imageData[c+1]/255.0;
+    colors[j+2] = this.imageData[c+2]/255.0;
 
   }
 
@@ -100,6 +120,9 @@ HapiField.prototype.createLookupGeometry = function(size) {
 
 }
 HapiField.prototype.update = function() {
+  if(!this.ready){
+    return;
+  }
   this.simulationUniforms.dT.value = clock.getDelta();
   this.simulation.update();
 

@@ -26,7 +26,7 @@ void main(){
 
   vec3 curl = curlNoise( pos.xyz * noiseSize );
 
-  vel += curl * .0001;
+  vel += curl * .00001;
   vel *= .97; // dampening
 
   vec3 p = pos.xyz + vel;
