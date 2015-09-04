@@ -60,26 +60,18 @@ HapiField.prototype.init = function() {
 }
 
 HapiField.prototype.createPositionTexture = function(size) {
-  var width = 2;
-  var height = 2;
-  var curY = 0;
-  var curX = 0;
+
   var data = new Float32Array(size * size * 4);
-  for (j=0; j < data.length; j+=4) {
-    data[j] = curX;
-    data[j+1] = curY
-    data[j+2] = 0
-    data[j+3]  = 0;
-
-    curX += 0.02;
-
-    if(j/2 % size === 0) {
-      curY -= .02
-      curX = 0;
-
+  var j = 0;
+  for (var x = 0; x < size; x++) {
+    for(var y = size-1; y >= 0; y--) {
+      data[j] = x/size;
+      data[j+1] = y/size;
+      data[j+2] = 0;
+      data[j+3] = 0;
+      j+=4;
     }
   }
-
   var texture = new THREE.DataTexture(
     data,
     size,
