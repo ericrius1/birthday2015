@@ -60,19 +60,24 @@ HapiField.prototype.init = function() {
 }
 
 HapiField.prototype.createPositionTexture = function(size) {
+  var width = 2;
+  var height = 2;
+  var curY = 0;
+  var curX = 0;
   var data = new Float32Array(size * size * 4);
-  var planeGeo = new THREE.PlaneGeometry(2, 2, 100, 100);
-  var mesh = new THREE.Mesh(planeGeo);
-  // scene.add(mesh)
-  var vertices = planeGeo.vertices;
-  for ( var i = 0, j=0; j < data.length; i++, j+=4) {
-    if(i >= vertices.length){
-      i = 0;
-    }
-    data[j] = vertices[i].x;
-    data[j+1] = vertices[i].y + Math.random()/10;
-    data[j+2] = vertices[i].z + Math.random()/10;
+  for (j=0; j < data.length; j+=4) {
+    data[j] = curX;
+    data[j+1] = curY
+    data[j+2] = 0
     data[j+3]  = 0;
+
+    curX += 0.02;
+
+    if(j/2 % size === 0) {
+      curY -= .02
+      curX = 0;
+
+    }
   }
 
   var texture = new THREE.DataTexture(
@@ -98,16 +103,20 @@ HapiField.prototype.createLookupGeometry = function(size) {
   var geo = new THREE.BufferGeometry();
   var positions = new Float32Array(size * size * 3);
   var colors = new Float32Array(size * size * 3);
+  var j = 0;
+  var c = 0;
+  for (var x = 0; x < size; x++) {
+    for(var y = 0; y < size; y++) {
+      positions[j] = x/size;
+      positions[j+1] = y/size;
 
-  for (var i = 0, j = 0, c = 0, l = positions.length / 3; i < l; i++, j += 3, c+=4) {
+      colors[j] = this.imageData[c]/255.0;
+      colors[j+1] = this.imageData[c+1]/255.0;
+      colors[j+2] = this.imageData[c+2]/255.0;
 
-    positions[j] = Math.random() * 10
-    positions[j + 1] = Math.random()
-
-    colors[j] = this.imageData[c]/255.0;
-    colors[j+1] = this.imageData[c+1]/255.0;
-    colors[j+2] = this.imageData[c+2]/255.0;
-
+      c+=4;
+      j+=3;
+    }
   }
 
   var posA = new THREE.BufferAttribute(positions, 3);
