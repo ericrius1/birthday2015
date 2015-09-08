@@ -61,9 +61,8 @@ HapiField.prototype.init = function() {
   this.simulation.reset(texture);
   this.ready = true;
   setTimeout(function() {
-    this.flow = true;
-  }.bind(this), 20000)
-
+    this.simulation.reset(texture);
+  }.bind(this), 5000)
 }
 
 HapiField.prototype.createPositionTexture = function(size) {
@@ -71,12 +70,12 @@ HapiField.prototype.createPositionTexture = function(size) {
   var data = new Float32Array(size * size * 4);
   var j = 0;
   for (var x = 0; x < size; x++) {
-    for(var y = size-1; y >= 0; y--) {
-      data[j] = x/size;
-      data[j+1] = y/size;
-      data[j+2] = 0;
-      data[j+3] = 0;
-      j+=4;
+    for (var y = size - 1; y >= 0; y--) {
+      data[j] = x / size;
+      data[j + 1] = y / size;
+      data[j + 2] = 0;
+      data[j + 3] = 0;
+      j += 4;
     }
   }
   var texture = new THREE.DataTexture(
@@ -105,16 +104,16 @@ HapiField.prototype.createLookupGeometry = function(size) {
   var j = 0;
   var c = 0;
   for (var x = 0; x < size; x++) {
-    for(var y = 0; y < size; y++) {
-      positions[j] = x/size;
-      positions[j+1] = y/size;
+    for (var y = 0; y < size; y++) {
+      positions[j] = x / size;
+      positions[j + 1] = y / size;
 
-      colors[j] = this.imageData[c]/255.0;
-      colors[j+1] = this.imageData[c+1]/255.0;
-      colors[j+2] = this.imageData[c+2]/255.0;
+      colors[j] = this.imageData[c] / 255.0;
+      colors[j + 1] = this.imageData[c + 1] / 255.0;
+      colors[j + 2] = this.imageData[c + 2] / 255.0;
 
-      c+=4;
-      j+=3;
+      c += 4;
+      j += 3;
     }
   }
 
@@ -128,7 +127,7 @@ HapiField.prototype.createLookupGeometry = function(size) {
 
 }
 HapiField.prototype.update = function() {
-  if(!this.ready){
+  if (!this.ready) {
     return;
   }
   this.simulation.update();
