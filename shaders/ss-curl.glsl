@@ -27,7 +27,6 @@ void main(){
   vec3 curl = curlNoise( pos.xyz * noiseSize );
 
   vel += curl * 0.0001;
-  // vel.z -= 0.0005;
   vel *= .9; 
 
   vec3 p = pos.xyz + vel;

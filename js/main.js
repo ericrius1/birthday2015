@@ -9,13 +9,13 @@
      // Muting audio, so we don't have feedback
      audio.mute.gain.value = 0;
 
+     var randFloat = THREE.Math.randFloat;
 
 
      var controlsEnabled = false;
-     // var controlsEnabled = true;
+     var controlsEnabled = true;
 
      var cameraSpeed = .01;
-     // var controlsEnabled = true;
 
 
 
@@ -75,6 +75,7 @@
        audio.update();
        wormhole.update
        hapi_field.update();
+       TWEEN.update();
        // camera.position.z -= cameraSpeed;
 
        renderer.render(scene, camera);

@@ -1,4 +1,5 @@
 var HapiField = function() {
+  this.photoEndPosition = new THREE.Vector3(-0.5, -0.5, -1);
   this.simulationUniforms = {
     dT: {
       type: "f",
@@ -7,6 +8,10 @@ var HapiField = function() {
     noiseSize: {
       type: "f",
       value: 2
+    },
+    direction: {
+      type: "f",
+      value: 1
     }
   }
 
@@ -18,6 +23,10 @@ var HapiField = function() {
     t_audio: {
       type: "t",
       value: audio.texture
+    },
+    direction: {
+      type: "f",
+      value: 1
     }
   }
 
@@ -50,19 +59,39 @@ HapiField.prototype.init = function() {
 
   this.simulation.setUniforms(this.simulationUniforms);
 
-  var particles = new THREE.PointCloud(geo, mat);
-  particles.frustumCulled = false;
-  particles.position.set(-0.5, -.5, -1);
-  scene.add(particles);
+  this.particlePhoto = new THREE.PointCloud(geo, mat);
+  this.particlePhoto.frustumCulled = false;
+  this.particlePhoto.position.set(randFloat(-3, 3), -4, randFloat(-3, 3));;
+  scene.add(this.particlePhoto);
 
   this.simulation.addBoundTexture(this.renderUniforms.t_pos, 'output');
 
   var texture = this.createPositionTexture(this.SIZE);
   this.simulation.reset(texture);
   this.ready = true;
-  setTimeout(function() {
-    this.simulation.reset(texture);
-  }.bind(this), 5000)
+
+  this.slideUp();
+}
+
+HapiField.prototype.slideUp = function() {
+  var curProps = {
+    x: this.particlePhoto.position.x,
+    y: this.particlePhoto.position.y,
+    z: this.particlePhoto.position.z
+  };
+
+  var endProps = {
+    x: this.photoEndPosition.x,
+    y: this.photoEndPosition.y,
+    z: this.photoEndPosition.z,
+  };
+
+  var slideTween = new TWEEN.Tween(curProps).
+    to(endProps, 1000).
+    onUpdate(function() {
+      this.particlePhoto.position.set(curProps.x, curProps.y, curProps.z);
+    }.bind(this)).
+    start();
 }
 
 HapiField.prototype.createPositionTexture = function(size) {
