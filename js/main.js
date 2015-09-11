@@ -24,8 +24,8 @@
 
      shaders.shaderSetLoaded = function() {
        init();
-       stream = new Stream('assets/across.mp3', audio.ctx, audio.gain);
        animate();
+       stream = new Stream('assets/across.mp3', audio.ctx, audio.gain);
        stream.play();
      }
 
@@ -76,6 +76,7 @@
        audio.update();
        wormhole.update
        // hapi_field.update();
+       video_message.update();
        TWEEN.update();
        // camera.position.z -= cameraSpeed;
 
