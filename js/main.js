@@ -1,5 +1,5 @@
      var camera, renderer, scene, controls, clock;
-     var wormhole, hapi_field;
+     var wormhole, hapi_field, video_message;
 
      var audioMesh;
      var stream;
@@ -25,8 +25,8 @@
      shaders.shaderSetLoaded = function() {
        init();
        stream = new Stream('assets/across.mp3', audio.ctx, audio.gain);
-       stream.play();
        animate();
+       stream.play();
      }
 
      shaders.load('vs-audio', 'audio', 'vertex');
@@ -63,7 +63,8 @@
        }
 
        wormhole = new Wormhole();
-       hapi_field = new HapiField();
+       // hapi_field = new HapiField();
+       video_message = new VideoMessage();
 
 
      }
@@ -74,7 +75,7 @@
        requestAnimationFrame(animate);
        audio.update();
        wormhole.update
-       hapi_field.update();
+       // hapi_field.update();
        TWEEN.update();
        // camera.position.z -= cameraSpeed;
 

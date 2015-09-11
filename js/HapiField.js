@@ -31,24 +31,41 @@ var HapiField = function() {
   }
 
   this.SIZE = 512;
-  var canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 512;
-  var canvasTexture = new THREE.Texture(canvas);
-  this.ctx = canvas.getContext('2d');
+  this.canvas = document.createElement('canvas');
+  this.canvas.width = 512;
+  this.canvas.height = 512;
+  this.canvasTexture = new THREE.Texture(this.canvas);
+  this.ctx = this.canvas.getContext('2d');
+
+  this.images = [];
+
+  this.imageIndex = 0;
+
   var image = new Image();
   image.src = "assets/stacyhoward.jpg";
-  image.onload = function() {
-    this.ctx.drawImage(image, 0, 0, this.SIZE, this.SIZE);
-    this.imageData = this.ctx.getImageData(0, 0, this.SIZE, this.SIZE).data;
-    canvasTexture.needsUpdate = true;
-    this.init();
-  }.bind(this);
+  this.images.push(image);
 
+  image = new Image();
+  image.src = "assets/lines.jpg";
+  this.images.push(image);
+
+
+  renderer.domElement.addEventListener( 'mousedown', this.onClick.bind(this), false );
 
 }
 
-HapiField.prototype.init = function() {
+HapiField.prototype.onClick = function() {
+    this.ctx.drawImage(this.images[this.imageIndex++], 0, 0, this.SIZE, this.SIZE);
+    this.imageData = this.ctx.getImageData(0, 0, this.SIZE, this.SIZE).data;
+    this.canvasTexture.needsUpdate = true;
+    this.newPhoto();
+
+    if(this.imageIndex === this.images.length) {
+      this.imageIndex = 0;
+    }
+}
+
+HapiField.prototype.newPhoto = function() {
   this.simulation = new PhysicsRenderer(this.SIZE, shaders.ss.sim, renderer);
   var geo = this.createLookupGeometry(this.SIZE);
   var mat = new THREE.ShaderMaterial({
@@ -59,9 +76,14 @@ HapiField.prototype.init = function() {
 
   this.simulation.setUniforms(this.simulationUniforms);
 
+  if(this.particlePhoto){
+    console.log('remove');
+    scene.remove(this.particlePhoto);
+  }
+
   this.particlePhoto = new THREE.PointCloud(geo, mat);
   this.particlePhoto.frustumCulled = false;
-  this.particlePhoto.position.set(randFloat(-3, 3), -4, randFloat(-3, 3));;
+  this.particlePhoto.position.set(randFloat(-3, 3), -10, randFloat(-3, 3));;
   scene.add(this.particlePhoto);
 
   this.simulation.addBoundTexture(this.renderUniforms.t_pos, 'output');
