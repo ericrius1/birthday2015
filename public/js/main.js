@@ -11,7 +11,6 @@
 
      var randFloat = THREE.Math.randFloat;
 
-     var videoReady = false;
      var controlsEnabled = false;
      var controlsEnabled = true;
 
@@ -31,18 +30,20 @@
      shaders.load('ss-curl', 'sim', 'simulation');
      shaders.load('vs-lookup', 'lookup', 'vertex');
      shaders.load('fs-lookup', 'lookup', 'fragment');
-      
 
+
+
+     stream = new Stream('assets/bday.mp3', audio.ctx, audio.gain);
+     stream.play();
 
      function init() {
-      stream = new Stream('assets/across.mp3', audio.ctx, audio.gain);
 
        var w = window.innerWidth;
        var h = window.innerHeight;
 
        camera = new THREE.PerspectiveCamera(65, w / h, 0.1, 10000);
        camera.position.set(0, 0, 1)
-       // camera.position.z = 10
+         // camera.position.z = 10
 
        scene = new THREE.Scene();
 
@@ -62,15 +63,9 @@
        }
 
        wormhole = new Wormhole();
-       setTimeout(function() {
-         video_message = new VideoMessage();
-         videoReady = true;
-         setTimeout(function() {
-            stream.play();
-         })
-       }, 1000);
-        animate();
-         // hapi_field = new HapiField();
+       video_message = new VideoMessage();
+       animate();
+       // hapi_field = new HapiField();
 
 
      }
@@ -81,10 +76,8 @@
        requestAnimationFrame(animate);
        audio.update();
        wormhole.update
-       // hapi_field.update();
-       if(videoReady){
-         video_message.update();
-       }
+         // hapi_field.update();
+       video_message.update();
        TWEEN.update();
        // camera.position.z -= cameraSpeed;
 
