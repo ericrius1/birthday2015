@@ -7,7 +7,7 @@
 
      // var userAudio = new UserAudio(audio.ctx, audio.gain);
      // Muting audio, so we don't have feedback
-     // audio.mute.gain.value = 0;
+     audio.mute.gain.value = 0;
 
      var randFloat = THREE.Math.randFloat;
 
