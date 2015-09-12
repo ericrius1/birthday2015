@@ -8,6 +8,7 @@ function Stream( file , ctx , output ){
   this.output = output;
 
   this.audio.src = this.file;
+
  
   this.source = this.ctx.createMediaElementSource( this.audio );
   this.source.connect( this.output );

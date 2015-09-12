@@ -5,13 +5,12 @@ var VideoMessage = function() {
   this.videoElement.src = "assets/bday.mp4";
   this.videoElement.load();
 
-  this.videoElement.addEventListener('loadeddata', function() {
+  this.videoElement.addEventListener('canplaythrough', function() {
     this.initialize();
   }.bind(this), false)
 }
 
 VideoMessage.prototype.initialize = function() {
-  console.log("heeey");
   var geo = new THREE.PlaneGeometry(1.3, 1);
 
   this.videoTexture = new THREE.Texture(this.videoElement);
@@ -27,7 +26,7 @@ VideoMessage.prototype.initialize = function() {
 
 VideoMessage.prototype.update = function() {
 
-  if(!this.ready) {
+  if (!this.ready) {
     return;
   }
 

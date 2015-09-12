@@ -7,11 +7,11 @@
 
      // var userAudio = new UserAudio(audio.ctx, audio.gain);
      // Muting audio, so we don't have feedback
-     audio.mute.gain.value = 0;
+     // audio.mute.gain.value = 0;
 
      var randFloat = THREE.Math.randFloat;
 
-
+     var videoReady = false;
      var controlsEnabled = false;
      var controlsEnabled = true;
 
@@ -24,9 +24,6 @@
 
      shaders.shaderSetLoaded = function() {
        init();
-       animate();
-       stream = new Stream('assets/across.mp3', audio.ctx, audio.gain);
-       stream.play();
      }
 
      shaders.load('vs-audio', 'audio', 'vertex');
@@ -34,9 +31,11 @@
      shaders.load('ss-curl', 'sim', 'simulation');
      shaders.load('vs-lookup', 'lookup', 'vertex');
      shaders.load('fs-lookup', 'lookup', 'fragment');
+      
 
 
      function init() {
+      stream = new Stream('assets/across.mp3', audio.ctx, audio.gain);
 
        var w = window.innerWidth;
        var h = window.innerHeight;
@@ -63,8 +62,15 @@
        }
 
        wormhole = new Wormhole();
-       // hapi_field = new HapiField();
-       video_message = new VideoMessage();
+       setTimeout(function() {
+         video_message = new VideoMessage();
+         videoReady = true;
+         setTimeout(function() {
+            stream.play();
+         })
+       }, 1000);
+        animate();
+         // hapi_field = new HapiField();
 
 
      }
@@ -76,7 +82,9 @@
        audio.update();
        wormhole.update
        // hapi_field.update();
-       video_message.update();
+       if(videoReady){
+         video_message.update();
+       }
        TWEEN.update();
        // camera.position.z -= cameraSpeed;
 
