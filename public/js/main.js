@@ -7,12 +7,12 @@
 
      // var userAudio = new UserAudio(audio.ctx, audio.gain);
      // Muting audio, so we don't have feedback
-     audio.mute.gain.value = 0;
+     audio.mute.gain.value = 0.5;
 
      var randFloat = THREE.Math.randFloat;
 
      var controlsEnabled = false;
-     var controlsEnabled = true;
+     // var controlsEnabled = true;
 
      var cameraSpeed = .01;
 
@@ -63,9 +63,9 @@
        }
 
        wormhole = new Wormhole();
-       video_message = new VideoMessage();
+       hapi_field = new HapiField();
+       video_message = new VideoMessage(hapi_field);
        animate();
-       // hapi_field = new HapiField();
 
 
      }
@@ -76,7 +76,7 @@
        requestAnimationFrame(animate);
        audio.update();
        wormhole.update
-         // hapi_field.update();
+        hapi_field.update();
        video_message.update();
        TWEEN.update();
        // camera.position.z -= cameraSpeed;

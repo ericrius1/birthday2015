@@ -16,9 +16,9 @@ void main(){
 
   vec4 audio = texture2D(t_audio, uv);
   float intensity = length(audio);
-  float pointSize = intensity * 5.0;
-  pointSize = max(pointSize, 0.5);
-  pointSize = min(pointSize, 50.0/length(dif));
+  float pointSize = 3.0;
+  // pointSize = max(pointSize, 0.5);
+  // pointSize = min(pointSize, 50.0/length(dif));
   gl_PointSize = pointSize;
   gl_Position = projectionMatrix * modelViewMatrix * vec4( pos.xyz , 1. );
 

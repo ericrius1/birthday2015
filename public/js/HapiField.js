@@ -1,5 +1,5 @@
 var HapiField = function() {
-  this.photoEndPosition = new THREE.Vector3(-0.5, -0.5, -1);
+  this.photoEndPosition = new THREE.Vector3(0.5, 0, -0.5);
   this.simulationUniforms = {
     dT: {
       type: "f",
@@ -12,6 +12,10 @@ var HapiField = function() {
     direction: {
       type: "f",
       value: 1
+    },
+    speed: {
+      type: "f",
+      value: 0.0
     }
   }
 
@@ -44,28 +48,26 @@ var HapiField = function() {
   var image = new Image();
   image.src = "assets/stacyhoward.jpg";
   this.images.push(image);
+  image.onload = function() {
+    this.newPhoto();
+  }.bind(this)
 
   image = new Image();
   image.src = "assets/lines.jpg";
-  this.images.push(image);
-
-
-  renderer.domElement.addEventListener( 'mousedown', this.onClick.bind(this), false );
+  this.images.push(image)
 
 }
 
-HapiField.prototype.onClick = function() {
-    this.ctx.drawImage(this.images[this.imageIndex++], 0, 0, this.SIZE, this.SIZE);
-    this.imageData = this.ctx.getImageData(0, 0, this.SIZE, this.SIZE).data;
-    this.canvasTexture.needsUpdate = true;
-    this.newPhoto();
-
-    if(this.imageIndex === this.images.length) {
-      this.imageIndex = 0;
-    }
-}
 
 HapiField.prototype.newPhoto = function() {
+  this.ctx.drawImage(this.images[this.imageIndex++], 0, 0, this.SIZE, this.SIZE);
+  this.imageData = this.ctx.getImageData(0, 0, this.SIZE, this.SIZE).data;
+  this.canvasTexture.needsUpdate = true;
+
+  if (this.imageIndex === this.images.length) {
+    this.imageIndex = 0;
+  }
+
   this.simulation = new PhysicsRenderer(this.SIZE, shaders.ss.sim, renderer);
   var geo = this.createLookupGeometry(this.SIZE);
   var mat = new THREE.ShaderMaterial({
@@ -76,14 +78,14 @@ HapiField.prototype.newPhoto = function() {
 
   this.simulation.setUniforms(this.simulationUniforms);
 
-  if(this.particlePhoto){
+  if (this.particlePhoto) {
     console.log('remove');
     scene.remove(this.particlePhoto);
   }
 
   this.particlePhoto = new THREE.PointCloud(geo, mat);
   this.particlePhoto.frustumCulled = false;
-  this.particlePhoto.position.set(randFloat(-3, 3), -10, randFloat(-3, 3));;
+  // this.particlePhoto.position.set(randFloat(-3, 3), -11, 0);
   scene.add(this.particlePhoto);
 
   this.simulation.addBoundTexture(this.renderUniforms.t_pos, 'output');
@@ -109,11 +111,11 @@ HapiField.prototype.slideUp = function() {
   };
 
   var slideTween = new TWEEN.Tween(curProps).
-    to(endProps, 1000).
-    onUpdate(function() {
-      this.particlePhoto.position.set(curProps.x, curProps.y, curProps.z);
-    }.bind(this)).
-    start();
+  to(endProps, 1000).
+  onUpdate(function() {
+    this.particlePhoto.position.set(curProps.x, curProps.y, curProps.z);
+  }.bind(this)).
+  start();
 }
 
 HapiField.prototype.createPositionTexture = function(size) {

@@ -38,10 +38,11 @@ var Wormhole = function() {
   this.mesh.translateZ(-depth/2);
   this.mesh.position.y -= 11;
   this.mesh.rotation.x = -Math.PI / 2;
+  this.mesh.position.z += 30;
   scene.add(this.mesh);
 
   this.mesh2 = new THREE.Mesh(geo, mat);
-  this.mesh2.position.set(0, 0, -depth/2)
+  this.mesh2.position.set(0, 0, -depth/2 + 10)
   this.mesh2.rotation.x = -Math.PI/2;
   scene.add(this.mesh2);
 }

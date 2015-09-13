@@ -3,6 +3,7 @@ uniform sampler2D t_pos;
 
 // uniform float dT;
 uniform float noiseSize;
+uniform float speed;
 uniform vec2  resolution;
 
 varying vec2 vUv;
@@ -26,8 +27,8 @@ void main(){
 
   vec3 curl = curlNoise( pos.xyz * noiseSize );
 
-  vel += curl * 0.0001;
-  vel *= .9; 
+  vel += curl * speed;
+  vel *= .97; 
 
   vec3 p = pos.xyz + vel;
 
