@@ -13,7 +13,7 @@ $simplex
 void main(){
 
   
-  float displacement = snoise( vec4( position * 4. , time * .01 ) ) * 15.0;
+  float displacement = snoise( vec4( position * 10., time * .01 ) ) * 15.0;
   vDisplacement = displacement;
 
   vAudioLookup =  abs( displacement ); //abs( normal.x * normal.y * normal.z * 3. );
@@ -25,7 +25,7 @@ void main(){
 
   // To visualize the audio, we will displace the position
   // by a value based on the audio, along the normal
-  vec3 pos = position + .1 * displacement * length( audio * 0.5)  * (normal * -1.0);
+  vec3 pos = position + .07 * displacement * length( audio * 0.5)  * (normal * -1.0);
   vec4 worldPos =  projectionMatrix * modelViewMatrix * vec4( pos , 1.);
 
   vModelPosition = position;
